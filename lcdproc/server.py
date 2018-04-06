@@ -4,8 +4,12 @@ try:
 except ImportError:
 	from urllib.parse import unquote
 import select
+import time
 
 from .screen import Screen
+
+class TimeOutError(Exception):
+	pass
 
 class Server(object):
 	""" LCDproc Server Object """
@@ -37,7 +41,10 @@ class Server(object):
 		""" Request """
 		self.tn.write((command_string + "\n").encode())
 		if self.debug: print("Telnet Request:  %s" % (command_string))
+		starttime = time.time()
 		while True:
+			if time.time() > (starttime +5):
+				raise TimeOutError('Timed out waiting for response')
 			response = unquote(self.tn.read_until(b"\n").decode())
 			if "success" in response:   # Normal successful reply
 				break
@@ -67,7 +74,7 @@ class Server(object):
 
 	def add_screen(self, ref):
 		""" Add Screen """
-		if ref not in self.screens:   
+		if ref not in self.screens:
 			screen = Screen(self, ref)
 			screen.clear()              # TODO Check this is needed, new screens should be clear.
 			self.screens[ref] = screen

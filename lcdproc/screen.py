@@ -22,6 +22,10 @@ class Screen(object):
 		self.server.request("screen_add %s" % (ref))
 		self.set_cursor("off")
 		
+	def __del__(self):
+		self.clear()
+		object.__del__(self)
+		
 	def set_name(self, name):
 		""" Set Screen Name """
 		self.name = name
@@ -89,64 +93,41 @@ class Screen(object):
 
 	def clear(self):
 		""" Clear Screen """
-		for widget in self.widgets:
-			self.del_widget(widget)
+		for ref in list(self.widgets):
+			self.del_widget(ref)
 			
 	def add_string_widget(self, ref, text="Text", x=1, y=1):
 		""" Add String Widget """
-		if ref not in self.widgets:   
-			widget = StringWidget(screen=self, ref=ref, text=text, x=x, y=y)
-			self.widgets[ref] = widget
-			return self.widgets[ref]
+		return StringWidget(screen=self, ref=ref, text=text, x=x, y=y)
 
 	def add_title_widget(self, ref, text="Title"):
 		""" Add Title Widget """
-		if ref not in self.widgets:   
-			widget = TitleWidget(screen=self, ref=ref, text=text)
-			self.widgets[ref] = widget
-			return self.widgets[ref]
+		return TitleWidget(screen=self, ref=ref, text=text)
 
 	def add_hbar_widget(self, ref, x=1, y=1, length=10):
 		""" Add Horizontal Bar Widget """
-		if ref not in self.widgets:   
-			widget = HBarWidget(screen=self, ref=ref, x=x, y=y, length=length)
-			self.widgets[ref] = widget
-			return self.widgets[ref] 
+		return HBarWidget(screen=self, ref=ref, x=x, y=y, length=length)
 
 	def add_vbar_widget(self, ref, x=1, y=1, length=10):
 		""" Add Vertical Bar Widget """
-		if ref not in self.widgets:   
-			widget = VBarWidget(screen=self, ref=ref, x=x, y=y, length=length)
-			self.widgets[ref] = widget
-			return self.widgets[ref]   
+		return VBarWidget(screen=self, ref=ref, x=x, y=y, length=length)
+		   
 
 	def add_icon_widget(self, ref, x=1, y=1, name="heart"):
 		""" Add Icon Widget """
-		if ref not in self.widgets:   
-			widget = IconWidget(screen=self, ref=ref, x=x, y=y, name=name)
-			self.widgets[ref] = widget
-			return self.widgets[ref]   
+		return IconWidget(screen=self, ref=ref, x=x, y=y, name=name)
 
 	def add_scroller_widget(self, ref, left=1, top=1, right=20, bottom=1, direction="h", speed=1, text="Message"):
 		""" Add Scroller Widget """
-		if ref not in self.widgets:   
-			widget = ScrollerWidget(screen=self, ref=ref, left=left, top=top, right=right, bottom=bottom, direction=direction, speed=speed, text=text)
-			self.widgets[ref] = widget
-			return self.widgets[ref]    
-		
+		return ScrollerWidget(screen=self, ref=ref, left=left, top=top, right=right, bottom=bottom, direction=direction, speed=speed, text=text)
+
 	def add_frame_widget(self, ref, left=1, top=1, right=20, bottom=1, width=20, height=4, direction="h", speed=1):
 		""" Add Frame Widget """
-		if ref not in self.widgets:   
-			widget = FrameWidget(screen=self, ref=ref, left=left, top=top, right=right, bottom=bottom, width=width, height=height, direction=direction, speed=speed)
-			self.widgets[ref] = widget
-			return self.widgets[ref]        
-		
+		return FrameWidget(screen=self, ref=ref, left=left, top=top, right=right, bottom=bottom, width=width, height=height, direction=direction, speed=speed)
+
 	def add_number_widget(self, ref, x=1, value=1):
 		""" Add Number Widget """
-		if ref not in self.widgets:   
-			widget = NumberWidget(screen=self, ref=ref, x=x, value=value)
-			self.widgets[ref] = widget
-			return self.widgets[ref]
+		return NumberWidget(screen=self, ref=ref, x=x, value=value)
 
 	def del_widget(self, ref):
 		""" Delete/Remove A Widget """

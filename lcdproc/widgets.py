@@ -1,9 +1,16 @@
 
-class StringWidget(object):
-	""" String Widget """
-	def __init__(self, screen, ref, x, y, text):
+class WidgetBase(object):
+	def __init__(self, screen, ref):
+		if ref in screen.widgets:
+			raise NameError('widget name must be unique')
 		self.screen = screen
 		self.ref = ref
+		self.screen.widgets[ref] = self
+		
+class StringWidget(WidgetBase):
+	""" String Widget """
+	def __init__(self, screen, ref, x, y, text):
+		WidgetBase.__init__(self, screen, ref)
 		self.x = x
 		self.y = y
 		self.text = text
@@ -29,11 +36,10 @@ class StringWidget(object):
 		self.text = text
 		self.update()             
         
-class TitleWidget(object):
+class TitleWidget(WidgetBase):
 	""" Title Widget """
 	def __init__(self, screen, ref, text):
-		self.screen = screen
-		self.ref = ref
+		WidgetBase.__init__(self, screen, ref)
 		self.text = text
 
 		self.screen.server.request("widget_add %s %s %s" % (self.screen.ref, self.ref, "title"))
@@ -46,10 +52,9 @@ class TitleWidget(object):
 		self.text = text
 		self.update()            
 
-class HBarWidget(object):
+class HBarWidget(WidgetBase):
 	def __init__(self, screen, ref, x, y, length):
-		self.screen = screen
-		self.ref = ref
+		WidgetBase.__init__(self, screen, ref)
 		self.x = x
 		self.y = y
 		self.length = length
@@ -72,10 +77,9 @@ class HBarWidget(object):
 		self.length = length
 		self.update()          
 
-class VBarWidget(object):
+class VBarWidget(WidgetBase):
 	def __init__(self, screen, ref, x, y, length):
-		self.screen = screen
-		self.ref = ref
+		WidgetBase.__init__(self, screen, ref)
 		self.x = x
 		self.y = y
 		self.length = length
@@ -98,10 +102,9 @@ class VBarWidget(object):
 		self.length = length
 		self.update()           
 
-class IconWidget(object):
+class IconWidget(WidgetBase):
 	def __init__(self, screen, ref, x, y, name):
-		self.screen = screen
-		self.ref = ref
+		WidgetBase.__init__(self, screen, ref)
 		self.x = x
 		self.y = y
 		self.name = name
@@ -124,10 +127,9 @@ class IconWidget(object):
 		self.name = name
 		self.update()        
 
-class ScrollerWidget(object):
+class ScrollerWidget(WidgetBase):
 	def __init__(self, screen, ref, left, top, right, bottom, direction, speed, text):
-		self.screen = screen
-		self.ref = ref
+		WidgetBase.__init__(self, screen, ref)
 		self.left = left
 		self.top = top
 		self.right = right
@@ -180,10 +182,9 @@ class ScrollerWidget(object):
 		self.text = text
 		self.update()
 
-class FrameWidget(object):
+class FrameWidget(WidgetBase):
 	def __init__(self, screen, ref, left, top, right, bottom, width, height, direction, speed):
-		self.screen = screen
-		self.ref = ref
+		WidgetBase.__init__(self, screen, ref)
 		self.left = left
 		self.top = top
 		self.right = right
@@ -242,10 +243,9 @@ class FrameWidget(object):
 		self.speed = speed
 		self.update()     
 
-class NumberWidget(object):
+class NumberWidget(WidgetBase):
 	def __init__(self, screen, ref, x, value):
-		self.screen = screen
-		self.ref = ref
+		WidgetBase.__init__(self, screen, ref)
 		self.x = x
 		self.value = value
 		self.screen.server.request("widget_add %s %s %s" % (self.screen.ref, 
