@@ -7,6 +7,9 @@ class WidgetBase(object):
 		self.ref = ref
 		self.screen.widgets[ref] = self
 		
+	def __del__(self):
+		self.screen.del_widget(self.ref)
+		
 class StringWidget(WidgetBase):
 	""" String Widget """
 	def __init__(self, screen, ref, x, y, text):
@@ -17,9 +20,6 @@ class StringWidget(WidgetBase):
 
 		self.screen.server.request("widget_add %s %s %s" % (self.screen.ref, self.ref, "string"))
 		self.update()
-
-	def __del__(self):
-		self.screen.server.request("widget_del %s" % (self.screen.ref, self.ref))
 		
 	def update(self):
 		self.screen.server.request('widget_set %s %s %s %s "%s"' % (self.screen.ref, self.ref, self.x, self.y, self.text))
