@@ -1,21 +1,13 @@
-#import ez_setup, os
-#ez_setup.use_setuptools()
-import os, sys
+import os
 from setuptools import setup, find_packages
-
-extra = {}
-if sys.version_info >= (3,):
-    extra['use_2to3'] = True
 
 setup(
     name = "lcdproc",
-    version = "0.03",
-    author = "JingleManSweep",
-    author_email = "jinglemansweep@gmail.com",
+    version = "0.04",
+    author = "JamesGKent",
     description = "Python OOP Wrapper Library for LCDproc Telnet API",
-    url = "http://github.com/jingleman/lcdproc",
+    url = "http://github.com/JamesGKent/python-lcdproc",
     packages = find_packages(),
     scripts = [],
     include_package_data = True,
-    **extra
 )
